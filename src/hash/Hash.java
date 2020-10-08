@@ -7,14 +7,16 @@ public class Hash {
 	ArrayList<Pair>[] hashTable;
 	int tableSize;
 	BiFunction<Integer, Integer,Integer> hash;
+	int collisions;
 	
 	static BiFunction <Integer, Integer, Integer> division = (index, tableSize) -> index % tableSize;
-	static BiFunction <Integer, Integer, Double> multiplication = (index, tableSize) -> Math.floor(tableSize*(index*((Math.sqrt(5)-1)/2)%1));
+	static BiFunction <Integer, Integer, Integer> multiplication = (index, tableSize) -> Utils.doubleToInteger(Math.floor(tableSize*(index*((Math.sqrt(5)-1)/2)%1)));
 	
 	@SuppressWarnings("unchecked")
 	void create(int tableSize, BiFunction<Integer, Integer,Integer> hash) {
 		this.tableSize = tableSize;
 		this.hash = hash;
+		this.collisions = 0;
 
 		this.hashTable = new ArrayList[tableSize];
 		
@@ -25,6 +27,9 @@ public class Hash {
 	
 	Pair insert(int key, String data) {
 		int tableIndex = this.getHashTableIndex(key);
+		if(this.hashTable[tableIndex].size() > 1) {
+			this.collisions ++;
+		}
 		this.hashTable[tableIndex].add(new Pair(key, data));
 		int lastElementIndex = this.hashTable[tableIndex].size() - 1;
 		return this.hashTable[tableIndex].get(lastElementIndex);
