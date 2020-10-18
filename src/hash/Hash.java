@@ -14,6 +14,7 @@ public class Hash {
 	
 	static BiFunction <Integer, Integer, Integer> division = (index, tableSize) -> index % tableSize;
 	static BiFunction <Integer, Integer, Integer> multiplication = (index, tableSize) -> Utils.doubleToInteger(Math.floor(tableSize*(index*((Math.sqrt(5)-1)/2)%1)));
+	static BiFunction <Integer, Integer, Integer> onePlusdivision = (index, m) -> 1 + (index % m);
 	
 	@SuppressWarnings("unchecked")
 	void create(int tableSize, BiFunction<Integer, Integer,Integer> hash, CollisionHandling collisionHandling) {
@@ -30,8 +31,7 @@ public class Hash {
 	}
 	
 	Pair insert(int key, String data) {
-		int tableIndex = this.getHashTableIndex(key);
-		return this.collisionHandling.handle(tableIndex, hashTable, key, data, comparator);	
+		return this.collisionHandling.handle(hashTable, key, data, hash, comparator);	
 	}
 	
 	Pair lookup(int key, String data) {
